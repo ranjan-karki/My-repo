@@ -1,0 +1,122 @@
+,"api end point : POST /api/sites/{site}/videos/{video_id}
+
+Add videos to an instance homepage (only when homepageResources setting is false)",,,"Below is the payload-schema:
+{
+  ""order"": int,
+  ""version_id"": int/null
+}",,"order: integer type which sets the order of the video in the list
+version_id: applicable when different version of a video is used, otherwise null
+
+Precondition: homepageResources setting must be FALSE for this endpoint to work
+
+Success Response:
+{
+  ""body"": true,
+  ""status"": {
+    ""message"": ""Okay"",
+    ""code"": ""ok"",
+    ""code_text"": ""Video Added Successfully""
+  }
+}",,,
+,,,,,,,,,
+,,,,,,,,,
+SN,Test ID,Test module,Test scenario,Test steps,Test data,Expected output,Actual output,Test result,Remarks
+1,,Precondition - Settings,Add video when homepageResources setting is false (valid precondition),,,"Video should be added successfully
+response code: 200
+code_text: Video Added Successfully",,,
+2,,,Add video when homepageResources setting is true,,,"Video should not be added
+response code: 404",,,
+3,,,Verify homepageResources setting is false before adding video,,,"Setting should return false
+response code: 200",,,
+4,,Order Field Validation,Add video with order value as 0,,,"Video should be added successfully
+response code: 200",,,
+5,,,Add video with order as positive integer,,,"Video should be added successfully
+response code: 200",,,
+6,,,Add video with order as negative integer,,,"Video should not be added
+response code: 417",,,
+7,,,Add video with order input empty/null,,,"Video should not be added
+response code: 417",,,
+8,,,Add video with order input as string,,,"Video should not be added
+response code: 417",,,
+9,,,Add video with order input as long string,,,"Video should not be added
+response code: 417",,,
+10,,,Add video with order input as long integer,,,"Video should not be added
+response code: 417",,,
+11,,,Add video with order input as decimal/float,,,"Video should not be added
+response code: 417",,,
+12,,,Add video with order input as special characters,,,"Video should not be added
+response code: 417",,,
+13,,,Add video with order input as JS script,,,"Video should not be added
+response code: 417",,,
+14,,,Add video with order input as SQL injection,,,"Video should not be added
+response code: 417",,,
+15,,,Add video with duplicate order value (same as existing),,,"Video should be added (order updated/reordered)
+response code: 200",,,
+16,,Version ID Validation,Add video with version_id as null,,,"Video should be added with default version
+response code: 200",,,
+19,,,Add video with version_id as string,,,"Video should not be added
+response code: 417",,,
+20,,,Add video with version_id as negative integer,,,"Video should not be added
+response code: 417",,,
+21,,,Add video with version_id as 0,,,"Video should not be added
+response code: 417",,,
+22,,,Add video with version_id as long integer,,,"Video should not be added
+response code: 417",,,
+23,,,Add video with version_id as decimal/float,,,"Video should not be added
+response code: 417",,,
+24,,,Add video with version_id as special characters,,,"Video should not be added
+response code: 417",,,
+25,,,Add video with version_id belonging to different video,,,"Video should not be added
+response code: 417",,,
+26,,Video ID Validation,Add video with valid video_id,,,"Video should be added successfully
+response code: 200",,,
+27,,,Add video with non-existent video_id,,,"Video should not be added
+response code: 404",,,
+28,,,Add video with deleted video_id,,,"Video should not be added
+response code: 404",,,
+29,,,Add video with video_id as string,,,"Video should not be added
+response code: 400",,,
+30,,,Add video with video_id as negative integer,,,"Video should not be added
+response code: 404",,,
+31,,,Add video with video_id as 0,,,"Video should not be added
+response code: 404",,,
+32,,,Add video with video_id as special characters,,,"Video should not be added
+response code: 400",,,
+33,,,Add video with video_id belonging to another site,,,"Video should not be added
+response code: 404",,,
+34,,Site Validation,Add video with valid site id,,,"Video should be added successfully
+response code: 200",,,
+35,,,Add video with non-existent site id,,,"Video should not be added
+response code: 404",,,
+36,,,Add video with deleted site id,,,"Video should not be added
+response code: 404",,,
+37,,,Add video with site id as string,,,"Video should not be added
+response code: 400",,,
+38,,,Add video with site id as negative integer,,,"Video should not be added
+response code: 404",,,
+39,,Payload Validation,Add video with empty payload,,,"Video should not be added
+response code: 417",,,
+40,,,Add video with missing order field,,,"Video should not be added
+response code: 417",,,
+41,,,Add video with missing version_id field,,,"Video should be added (version_id defaults to null)
+response code: 200",,,
+42,,,Add video with extra unknown fields in payload,,,"Video should be added (extra fields ignored)
+response code: 200",,,
+43,,,Add video with malformed JSON payload,,,"Video should not be added
+response code: 400",,,
+44,,,Add video with payload containing only order,,,"Video should be added successfully
+response code: 200",,,
+45,,Duplicate Video Tests,Add same video twice to homepage,,,"Video should not be added (duplicate)
+response code: 417",,,
+46,,,Add same video with different version_id,,,"Video should be added successfully
+response code: 200",,,
+47,,,Add multiple different videos to homepage,,,"All videos should be added successfully
+response code: 200",,,
+48,,Response Validation,Verify response body is true on success,,,"Response body should be true
+response code: 200",,,
+49,,,Verify response status message is 'Okay' on success,,,"Status message should be 'Okay'
+response code: 200",,,
+50,,,Verify response code is 'ok' on success,,,"Status code should be 'ok'
+response code: 200",,,
+51,,,Verify response code_text is 'Video Added Successfully',,,"code_text should match expected
+response code: 200",,,

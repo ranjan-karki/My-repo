@@ -1,0 +1,223 @@
+,API Endpoint: POST /api/sites - Create a new site,,,"Payload: {title, domain, primary_color, secondary_color, logo_url, layout (string - optional)}",,"Required: title, domain, logo_url, primary_color, secondary_color. Domain must be unique. Colors accept hash code (#121212). Layout: optional string field, accepts only valid theme element names saved in the system.",,,
+SN,Test ID,Test module,Test scenario,Test steps,Test data,Expected output,Actual output,Test result,Remarks
+1,,Site Add - Valid,create site with all valid fields in payload,,,"Site should be created successfully
+response code: 200",,,
+2,,,create site with mandatory fields only in payload,,,"Site should be created successfully
+response code: 200",,,
+3,,Title Field - Valid,create site with title at max char limit (255) in request body,,,"Site should be created successfully
+response code: 200",,,
+4,,,create site with title at min char limit (1) in request body,,,"Site should be created successfully
+response code: 200",,,
+5,,Title Field - Invalid,create site with title exceeding max char limit (256) in request body,,,"Site should not be created
+response code: 417",,,
+6,,,create site with empty title in request body,,,"Site should not be created (title is required)
+response code: 417",,,
+7,,,create site with null title in request body,,,"Site should not be created (title is required)
+response code: 417",,,
+8,,,create site with title as integer type in request body,,,"Site should not be created
+response code: 417",,,
+9,,Title Field - Security,create site with title as JS script injection in request body,,,"Site should be created (input sanitized)
+response code: 200",,,
+10,,,create site with title as SQL injection in request body,,,"Site should be created (input sanitized)
+response code: 200",,,
+11,,,create site with title as special characters in request body,,,"Site should be created successfully
+response code: 200",,,
+12,,,create site with title as directory traversal path (../..) in request body,,,"Site should be created (input sanitized)
+response code: 200",,,
+13,,Domain Field - Valid,create site with valid unique domain in request body,,,"Site should be created successfully
+response code: 200",,,
+14,,,create site with domain at max char limit in request body,,,"Site should be created successfully
+response code: 200",,,
+15,,,create site with domain at min char limit (1) in request body,,,"Site should be created successfully
+response code: 200",,,
+16,,,create site with domain containing lowercase alphanumeric in request body,,,"Site should be created successfully
+response code: 200",,,
+17,,,create site with domain containing hyphens in request body,,,"Site should be created successfully
+response code: 200",,,
+18,,Domain Field - Invalid,create site with empty domain in request body,,,"Site should not be created (domain is required)
+response code: 417",,,
+19,,,create site with null domain in request body,,,"Site should not be created (domain is required)
+response code: 417",,,
+20,,,create site with domain as integer type in request body,,,"Site should not be created
+response code: 417",,,
+21,,,create site with domain containing uppercase letters in request body,,,"Site should not be created (invalid domain format)
+response code: 417",,,
+22,,,create site with domain containing spaces in request body,,,"Site should not be created (invalid domain format)
+response code: 417",,,
+23,,,create site with domain starting with hyphen in request body,,,"Site should not be created (invalid domain format)
+response code: 417",,,
+24,,,create site with domain ending with hyphen in request body,,,"Site should not be created (invalid domain format)
+response code: 417",,,
+25,,,create site with domain containing consecutive hyphens in request body,,,"Site should not be created (invalid domain format)
+response code: 417",,,
+26,,,create site with domain containing underscore in request body,,,"Site should not be created (invalid domain format)
+response code: 417",,,
+27,,,create site with domain containing special characters in request body,,,"Site should not be created (invalid domain format)
+response code: 417",,,
+28,,,create site with domain containing period/dot in request body,,,"Site should not be created (invalid domain format)
+response code: 417",,,
+29,,Domain - Uniqueness,create site with domain that already exists in request body,,,"Site should not be created (duplicate domain)
+response code: 417",,,
+30,,,create site with domain used by deleted site in request body,,,"Site should be created (domain reusable)
+response code: 200",,,
+31,,Domain - Security,create site with domain as JS script injection in request body,,,"Site should not be created (invalid domain)
+response code: 417",,,
+32,,,create site with domain as SQL injection in request body,,,"Site should not be created (invalid domain)
+response code: 417",,,
+33,,,create site with domain as directory traversal path in request body,,,"Site should not be created (invalid domain)
+response code: 417",,,
+34,,,create site with domain as HTML tags in request body,,,"Site should not be created (invalid domain)
+response code: 417",,,
+35,,Logo URL - Valid,create site with valid logo_url (jpg extension) in request body,,,"Site should be created successfully
+response code: 200",,,
+36,,,create site with valid logo_url (jpeg extension) in request body,,,"Site should be created successfully
+response code: 200",,,
+37,,,create site with valid logo_url (png extension) in request body,,,"Site should be created successfully
+response code: 200",,,
+38,,,create site with valid logo_url (svg extension) in request body,,,"Site should be created successfully
+response code: 200",,,
+39,,Logo URL - Invalid,create site with empty logo_url in request body,,,"Site should not be created (logo_url is required)
+response code: 417",,,
+40,,,create site with null logo_url in request body,,,"Site should not be created (logo_url is required)
+response code: 417",,,
+41,,,create site with logo_url as gif extension in request body,,,"Site should not be created (invalid image format)
+response code: 417",,,
+42,,,create site with logo_url as document file in request body,,,"Site should not be created (invalid image format)
+response code: 417",,,
+43,,,create site with logo_url as video file in request body,,,"Site should not be created (invalid image format)
+response code: 417",,,
+44,,,create site with invalid logo_url format in request body,,,"Site should not be created (invalid URL format)
+response code: 417",,,
+45,,,create site with logo_url as integer type in request body,,,"Site should not be created
+response code: 417",,,
+46,,Logo URL - Security,create site with logo_url as JS script injection in request body,,,"Site should not be created (invalid URL)
+response code: 417",,,
+47,,,create site with logo_url as SQL injection in request body,,,"Site should not be created (invalid URL)
+response code: 417",,,
+48,,,create site with logo_url as directory traversal path in request body,,,"Site should not be created (invalid URL)
+response code: 417",,,
+49,,Primary Color - Valid,create site with valid primary_color hash (#121212) in request body,,,"Site should be created successfully
+response code: 200",,,
+50,,,create site with primary_color as 3-digit hash (#FFF) in request body,,,"Site should be created successfully
+response code: 200",,,
+51,,,create site with primary_color lowercase hash (#abcdef) in request body,,,"Site should be created successfully
+response code: 200",,,
+52,,,create site with primary_color uppercase hash (#ABCDEF) in request body,,,"Site should be created successfully
+response code: 200",,,
+53,,Primary Color - Invalid,create site with empty primary_color in request body,,,"Site should not be created (primary_color is required)
+response code: 417",,,
+54,,,create site with null primary_color in request body,,,"Site should not be created (primary_color is required)
+response code: 417",,,
+55,,,create site with primary_color without hash symbol in request body,,,"Site should not be created (invalid color format)
+response code: 417",,,
+56,,,create site with primary_color as invalid hex chars in request body,,,"Site should not be created (invalid color format)
+response code: 417",,,
+57,,,create site with primary_color exceeding 7 chars in request body,,,"Site should not be created (invalid color format)
+response code: 417",,,
+58,,,create site with primary_color as integer type in request body,,,"Site should not be created
+response code: 417",,,
+59,,,create site with primary_color as RGB format in request body,,,"Site should not be created (only hash code accepted)
+response code: 417",,,
+60,,Primary Color - Security,create site with primary_color as JS script injection in request body,,,"Site should not be created (invalid color)
+response code: 417",,,
+61,,,create site with primary_color as SQL injection in request body,,,"Site should not be created (invalid color)
+response code: 417",,,
+62,,Secondary Color - Valid,create site with valid secondary_color hash (#c8c6fd) in request body,,,"Site should be created successfully
+response code: 200",,,
+63,,,create site with secondary_color as 3-digit hash (#ABC) in request body,,,"Site should be created successfully
+response code: 200",,,
+64,,Secondary Color - Invalid,create site with empty secondary_color in request body,,,"Site should not be created (secondary_color is required)
+response code: 417",,,
+65,,,create site with null secondary_color in request body,,,"Site should not be created (secondary_color is required)
+response code: 417",,,
+66,,,create site with secondary_color without hash symbol in request body,,,"Site should not be created (invalid color format)
+response code: 417",,,
+67,,,create site with secondary_color as invalid hex chars in request body,,,"Site should not be created (invalid color format)
+response code: 417",,,
+68,,,create site with secondary_color as integer type in request body,,,"Site should not be created
+response code: 417",,,
+69,,Secondary Color - Security,create site with secondary_color as JS script in request body,,,"Site should not be created (invalid color)
+response code: 417",,,
+70,,,create site with secondary_color as SQL injection in request body,,,"Site should not be created (invalid color)
+response code: 417",,,
+71,,Layout Field - Valid,create site with valid layout theme element name in request body,,,"Site should be created with selected layout
+response code: 200",,,
+72,,,create site without layout field in request body,,,"Site should be created with default layout
+response code: 200",,,
+73,,,create site with layout as empty string in request body,,,"Site should be created with default layout
+response code: 200",,,
+74,,Layout Field - Invalid,create site with layout as non-existent theme element name in request body,,,"Site should not be created (invalid theme element)
+response code: 404",,,
+75,,,create site with layout as integer type in request body,,,"Site should not be created (layout must be string)
+response code: 417",,,
+76,,,create site with layout as invalid theme element name in request body,,,"Site should not be created (theme element not found)
+response code: 404",,,
+77,,,create site with layout as decimal in request body,,,"Site should not be created (layout must be string)
+response code: 417",,,
+78,,,create site with layout as boolean in request body,,,"Site should not be created (layout must be string)
+response code: 417",,,
+79,,Layout - Security,create site with layout as JS script injection in request body,,,"Site should not be created (invalid theme element)
+response code: 404",,,
+80,,,create site with layout as SQL injection in request body,,,"Site should not be created (invalid theme element)
+response code: 404",,,
+81,,Layout - Security,create site with layout as directory traversal path in request body,,,"Site should not be created (invalid theme element)
+response code: 404",,,
+82,,,create site with layout as HTML tags in request body,,,"Site should not be created (invalid theme element)
+response code: 404",,,
+83,,,create site with layout as special characters in request body,,,"Site should not be created (invalid theme element)
+response code: 404",,,
+84,,Layout - String Validation,create site with layout exceeding max char limit in request body,,,"Site should not be created (exceeds limit)
+response code: 417",,,
+85,,,create site with layout as null in request body,,,"Site should be created with default layout
+response code: 200",,,
+86,,,create site with layout containing whitespace in request body,,,"Site should not be created (invalid theme element)
+response code: 404",,,
+87,,Missing Required Fields,create site without title field in request body,,,"Site should not be created (title is required)
+response code: 417",,,
+88,,,create site without domain field in request body,,,"Site should not be created (domain is required)
+response code: 417",,,
+89,,,create site without logo_url field in request body,,,"Site should not be created (logo_url is required)
+response code: 417",,,
+90,,,create site without primary_color field in request body,,,"Site should not be created (primary_color is required)
+response code: 417",,,
+91,,,create site without secondary_color field in request body,,,"Site should not be created (secondary_color is required)
+response code: 417",,,
+92,,,create site with only title field in request body,,,"Site should not be created (missing required fields)
+response code: 417",,,
+93,,Edge Cases,create site with empty JSON payload,,,"Site should not be created (missing required fields)
+response code: 417",,,
+94,,,create site with malformed JSON payload,,,"API returns bad request error (invalid JSON)
+response code: 400",,,
+95,,,create site with extra/unexpected fields in payload,,,"Site should be created (extra fields ignored)
+response code: 200",,,
+96,,,GET request to POST /api/sites endpoint (method not allowed),,,"API returns method not allowed error
+response code: 405",,,
+97,,,PUT request to POST /api/sites endpoint (method not allowed),,,"API returns method not allowed error
+response code: 405",,,
+98,,,DELETE request to POST /api/sites endpoint (method not allowed),,,"API returns method not allowed error
+response code: 405",,,
+99,,,create site with all fields as null in request body,,,"Site should not be created (missing required fields)
+response code: 417",,,
+100,,,create site with whitespace only in required string fields,,,"Site should not be created (invalid input)
+response code: 417",,,
+101,,,create multiple sites concurrently with same domain,,,"Only one site created, others return conflict
+response code: 409",,,
+102,,Response Validation,Verify POST success response contains site id and all submitted fields,,,"Response includes site id, title, domain, colors, logo_url
+response code: 200",,,
+103,,,Verify POST error response contains validation error for missing title,,,"Response includes validation error for title field
+response code: 417",,,
+104,,,Verify POST error response contains conflict error for duplicate domain,,,"Response includes conflict error for domain
+response code: 409",,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,

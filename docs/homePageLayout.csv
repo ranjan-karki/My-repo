@@ -1,0 +1,118 @@
+,"api end point : /api/sites/{site}/instances/{instance}/homepage-layouts
+",,," Below is the payload -schema :
+{
+  ""banner"": ""string"",
+  ""title"": ""string"",
+  ""footer"": ""string"",
+  ""sub_footer"": true
+}",,"Banner : receives url string as input, url must be of extensions (jpg,jpeg,png,svg)
+title : input field
+footer :text  field
+sub-footer: boolean field",,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,
+SN,Test ID,Test module,Test scenario,Test steps,Test data,Expected output,Actual output,Test result,Remarks,,,,,,,,,,,,,,,,
+1,,Homepage Layout Create,Create homepage layout with all valid inputs with jpg image url,,,"Layout should be created successfully
+response code: 200",,,,,,,,,,,,,,,,,,,
+2,,,Create homepage layout with all valid inputs with jpeg image url,,,"Layout should be created successfully
+response code: 200",,,,,,,,,,,,,,,,,,,
+3,,,Create homepage layout with all valid inputs with png image url,,,"Layout should be created successfully
+response code: 200",,,,,,,,,,,,,,,,,,,
+4,,,Create homepage layout with all valid inputs with svg image url,,,"Layout should be created successfully
+response code: 200",,,,,,,,,,,,,,,,,,,
+5,,,Create homepage layout with gif image url (invalid extension),,,"Layout should not be created
+response code: 417",,,,,,,,,,,,,,,,,,,
+6,,,Create homepage layout with document file url (invalid),,,"Layout should not be created
+response code: 417",,,,,,,,,,,,,,,,,,,
+7,,,Create homepage layout with video url (invalid),,,"Layout should not be created
+response code: 417",,,,,,,,,,,,,,,,,,,
+8,,,Create homepage layout with empty banner url,,,"Layout should not be created
+response code: 417",,,,,,,,,,,,,,,,,,,
+9,,,Create homepage layout with invalid banner url format,,,"Layout should not be created
+response code: 417",,,,,,,,,,,,,,,,,,,
+10,,,Create homepage layout with title char max limit (255),,,"Layout should be created successfully
+response code: 200",,,,,,,,,,,,,,,,,,,
+11,,,Create homepage layout with title char max limit +1,,,"Layout should not be created
+response code: 417",,,,,,,,,,,,,,,,,,,
+12,,,Create homepage layout with title char min limit (1),,,"Layout should be created successfully
+response code: 200",,,,,,,,,,,,,,,,,,,
+13,,,Create homepage layout with title char min limit -1 (empty),,,"Layout should not be created
+response code: 417",,,,,,,,,,,,,,,,,,,
+14,,,Create homepage layout with title input as integer,,,"Layout should be created (type coercion)
+response code: 200",,,,,,,,,,,,,,,,,,,
+15,,,Create homepage layout with title input as JS script,,,"Layout should be created (sanitized)
+response code: 200",,,,,,,,,,,,,,,,,,,
+16,,,Create homepage layout with title input as SQL injection,,,"Layout should be created (sanitized)
+response code: 200",,,,,,,,,,,,,,,,,,,
+17,,,Create homepage layout with title input special characters,,,"Layout should be created successfully
+response code: 200",,,,,,,,,,,,,,,,,,,
+18,,,Create homepage layout with title input traversal path,,,"Layout should be created (sanitized)
+response code: 200",,,,,,,,,,,,,,,,,,,
+19,,,Create homepage layout with title input large char set,,,"Layout should not be created
+response code: 417",,,,,,,,,,,,,,,,,,,
+20,,,Create homepage layout with title input as long integer,,,"Layout should not be created
+response code: 417",,,,,,,,,,,,,,,,,,,
+21,,,Create homepage layout with footer input large char set,,,"Layout should be created successfully
+response code: 200",,,,,,,,,,,,,,,,,,,
+22,,,Create homepage layout with footer char min limit (1),,,"Layout should be created successfully
+response code: 200",,,,,,,,,,,,,,,,,,,
+23,,,Create homepage layout with footer char min limit -1 (empty),,,"Layout should not be created
+response code: 417",,,,,,,,,,,,,,,,,,,
+24,,,Create homepage layout with footer input as integer,,,"Layout should be created (type coercion)
+response code: 200",,,,,,,,,,,,,,,,,,,
+25,,,Create homepage layout with footer input as JS script,,,"Layout should be created (sanitized)
+response code: 200",,,,,,,,,,,,,,,,,,,
+26,,,Create homepage layout with footer input as SQL injection,,,"Layout should be created (sanitized)
+response code: 200",,,,,,,,,,,,,,,,,,,
+27,,,Create homepage layout with footer input special characters,,,"Layout should be created successfully
+response code: 200",,,,,,,,,,,,,,,,,,,
+28,,,Create homepage layout with footer input traversal path,,,"Layout should be created (sanitized)
+response code: 200",,,,,,,,,,,,,,,,,,,
+29,,,Create homepage layout with sub_footer input true,,,"Layout should be created with sub_footer=true
+response code: 200",,,,,,,,,,,,,,,,,,,
+30,,,Create homepage layout with sub_footer input false,,,"Layout should be created with sub_footer=false
+response code: 200",,,,,,,,,,,,,,,,,,,
+31,,,Create homepage layout with sub_footer input empty/null,,,"Layout should use default sub_footer value
+response code: 200",,,,,,,,,,,,,,,,,,,
+32,,,Create homepage layout with sub_footer input integer except 0/1,,,"Layout should not be created
+response code: 417",,,,,,,,,,,,,,,,,,,
+33,,,Create homepage layout with sub_footer input as string,,,"Layout should not be created
+response code: 417",,,,,,,,,,,,,,,,,,,
+34,,,Create homepage layout with sub_footer input as long char set,,,"Layout should not be created
+response code: 417",,,,,,,,,,,,,,,,,,,
+35,,,Create homepage layout with sub_footer input as long integer,,,"Layout should not be created
+response code: 417",,,,,,,,,,,,,,,,,,,
+36,,,Create homepage layout with sub_footer input as JS script,,,"Layout should not be created
+response code: 417",,,,,,,,,,,,,,,,,,,
+37,,,Create homepage layout with sub_footer input as SQL injection,,,"Layout should not be created
+response code: 417",,,,,,,,,,,,,,,,,,,
+38,,,Create homepage layout with sub_footer input special characters,,,"Layout should not be created
+response code: 417",,,,,,,,,,,,,,,,,,,
+39,,,Create homepage layout with sub_footer input traversal path,,,"Layout should not be created
+response code: 417",,,,,,,,,,,,,,,,,,,
+40,,Instance Validation,Create homepage layout with invalid instance id,,,"Layout should not be created
+response code: 404",,,,,,,,,,,,,,,,,,,
+41,,,Create homepage layout with deleted instance id,,,"Layout should not be created
+response code: 404",,,,,,,,,,,,,,,,,,,
+42,,,Create homepage layout with non-existent site id,,,"Layout should not be created
+response code: 404",,,,,,,,,,,,,,,,,,,
+43,,,Create homepage layout with instance id of another site,,,"Layout should not be created
+response code: 404",,,,,,,,,,,,,,,,,,,
+44,,Payload Validation,Create homepage layout with empty payload,,,"Layout should not be created
+response code: 417",,,,,,,,,,,,,,,,,,,
+45,,,Create homepage layout with missing banner field,,,"Layout should not be created
+response code: 417",,,,,,,,,,,,,,,,,,,
+46,,,Create homepage layout with missing title field,,,"Layout should not be created
+response code: 417",,,,,,,,,,,,,,,,,,,
+47,,,Create homepage layout with missing footer field,,,"Layout should not be created
+response code: 417",,,,,,,,,,,,,,,,,,,
+48,,,Create homepage layout with missing sub_footer field,,,"Layout should be created with default sub_footer
+response code: 200",,,,,,,,,,,,,,,,,,,
+49,,,Create homepage layout with extra unknown fields in payload,,,"Layout should be created (extra fields ignored)
+response code: 200",,,,,,,,,,,,,,,,,,,
+50,,,Create homepage layout with malformed JSON payload,,,"Layout should not be created
+response code: 400",,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,

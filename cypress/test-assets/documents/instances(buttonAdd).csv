@@ -1,0 +1,368 @@
+,"API Endpoint: POST /api/sites/{site}/button-resources
+
+Add buttons to a site (requires 'buttons' instance setting to be TRUE)",,,"Payload Schema:
+{
+  ""title"": ""string"",
+  ""placement"": ""string"",
+  ""icon"": ""string"",
+  ""class_name"": ""string"",
+  ""button_style"": int,
+  ""text_color"": ""string"",
+  ""background_color"": ""string"",
+  ""order"": int,
+  ""status"": boolean,
+  ""type"": ""string"",
+  ""content"": ""string"",
+  ""property"": ""string (JSON)""
+}",,"Required Fields: title, placement, button_style, order, status, type, content
+Field Validations:
+- placement: only 'navbar' or 'header'
+- type: only 'link', 'modal', or 'scroll'
+- button_style: only 0, 1, or 2
+- content: URL if type=link, text if type=modal, element id if type=scroll (REQUIRED)
+- icon: class name of icons (optional)
+- class_name: max 50 chars (optional)
+- property: JSON input only (optional)
+- text_color/background_color: hash color code (#121212)
+- String max limit: 100 chars (except content field for modal type)",,,
+SN,Test ID,Test module,Test scenario,Test steps,Test data,Expected output,Actual output,Test result,Remarks
+1,,Button Add - Valid,create button with all valid fields in payload,,,"Button should be created successfully
+response code: 200",,,
+2,,,"create button with mandatory fields only (title, placement, button_style, order, status, type) in payload",,,"Button should be created successfully
+response code: 200",,,
+3,,Title Field - Valid,create button with title at max char limit (100) in request body,,,"Button should be created successfully
+response code: 200",,,
+4,,,create button with title at min char limit (1) in request body,,,"Button should be created successfully
+response code: 200",,,
+5,,Title Field - Invalid,create button with title exceeding max char limit (101) in request body,,,"Button should not be created
+response code: 417",,,
+6,,,create button with title as empty string in request body,,,"Button should not be created (title required)
+response code: 417",,,
+7,,,create button with title as null in request body,,,"Button should not be created (title required)
+response code: 417",,,
+8,,,create button with title as integer type in request body,,,"Button should not be created
+response code: 417",,,
+9,,,create button without title field in request body,,,"Button should not be created (title required)
+response code: 417",,,
+10,,Title Field - Security,create button with title as JS script injection in request body,,,"Button should be created (input sanitized)
+response code: 200",,,
+11,,,create button with title as SQL injection in request body,,,"Button should be created (input sanitized)
+response code: 200",,,
+12,,,create button with title as special characters in request body,,,"Button should be created successfully
+response code: 200",,,
+13,,Placement Field - Valid,create button with placement as 'navbar' in request body,,,"Button should be created successfully
+response code: 200",,,
+14,,,create button with placement as 'header' in request body,,,"Button should be created successfully
+response code: 200",,,
+15,,Placement Field - Invalid,"create button with placement as invalid string (e.g., 'footer') in request body",,,"Button should not be created
+response code: 417",,,
+16,,,create button with placement as empty string in request body,,,"Button should not be created (placement required)
+response code: 417",,,
+17,,,create button with placement as null in request body,,,"Button should not be created (placement required)
+response code: 417",,,
+18,,,create button with placement as integer type in request body,,,"Button should not be created
+response code: 417",,,
+19,,,create button with placement as 'NAVBAR' (uppercase) in request body,,,"Button should not be created (case sensitive)
+response code: 417",,,
+20,,,create button with placement as 'Navbar' (mixed case) in request body,,,"Button should not be created (case sensitive)
+response code: 417",,,
+21,,,create button without placement field in request body,,,"Button should not be created (placement required)
+response code: 417",,,
+22,,Placement Field - Security,create button with placement as JS script injection in request body,,,"Button should not be created
+response code: 417",,,
+23,,,create button with placement as SQL injection in request body,,,"Button should not be created
+response code: 417",,,
+24,,Type Field - Valid,create button with type as 'link' in request body,,,"Button should be created successfully
+response code: 200",,,
+25,,,create button with type as 'modal' in request body,,,"Button should be created successfully
+response code: 200",,,
+26,,,create button with type as 'scroll' in request body,,,"Button should be created successfully
+response code: 200",,,
+27,,Type Field - Invalid,"create button with type as invalid string (e.g., 'button') in request body",,,"Button should not be created
+response code: 417",,,
+28,,,create button with type as empty string in request body,,,"Button should not be created (type required)
+response code: 417",,,
+29,,,create button with type as null in request body,,,"Button should not be created (type required)
+response code: 417",,,
+30,,,create button with type as integer type in request body,,,"Button should not be created
+response code: 417",,,
+31,,,create button with type as 'LINK' (uppercase) in request body,,,"Button should not be created (case sensitive)
+response code: 417",,,
+32,,,create button without type field in request body,,,"Button should not be created (type required)
+response code: 417",,,
+33,,Type Field - Security,create button with type as JS script injection in request body,,,"Button should not be created
+response code: 417",,,
+34,,,create button with type as SQL injection in request body,,,"Button should not be created
+response code: 417",,,
+35,,Content Field - Link Type,create button with type 'link' and content as valid URL in request body,,,"Button should be created successfully
+response code: 200",,,
+36,,,create button with type 'link' and content as invalid URL format in request body,,,"Button should not be created
+response code: 417",,,
+37,,,create button with type 'link' and content as empty string in request body,,,"Button should not be created (content required)
+response code: 417",,,
+38,,,create button with type 'link' and content as plain text in request body,,,"Button should not be created
+response code: 417",,,
+39,,Content Field - Modal Type,create button with type 'modal' and content as text input in request body,,,"Button should be created successfully
+response code: 200",,,
+40,,,create button with type 'modal' and content as HTML text in request body,,,"Button should be created successfully
+response code: 200",,,
+41,,,create button with type 'modal' and content as empty string in request body,,,"Button should not be created (content required)
+response code: 417",,,
+42,,,create button with type 'modal' and content as long HTML text (exceeds normal limit) in request body,,,"Button should be created successfully (modal allows extended content)
+response code: 200",,,
+43,,Content Field - Scroll Type,"create button with type 'scroll' and content as valid element id (e.g., '#title') in request body",,,"Button should be created successfully
+response code: 200",,,
+44,,,create button with type 'scroll' and content as element id without hash in request body,,,"Button should not be created
+response code: 417",,,
+45,,,create button with type 'scroll' and content as empty string in request body,,,"Button should not be created (content required)
+response code: 417",,,
+46,,,create button with type 'scroll' and content as URL in request body,,,"Button should not be created
+response code: 417",,,
+47,,Content Field - Security,create button with content as JS script injection in request body,,,"Button should be created (input sanitized)
+response code: 200",,,
+48,,,create button with content as SQL injection in request body,,,"Button should be created (input sanitized)
+response code: 200",,,
+49,,Button Style - Valid,create button with button_style as 0 in request body,,,"Button should be created successfully
+response code: 200",,,
+50,,,create button with button_style as 1 in request body,,,"Button should be created successfully
+response code: 200",,,
+51,,,create button with button_style as 2 in request body,,,"Button should be created successfully
+response code: 200",,,
+52,,Button Style - Invalid,create button with button_style as 3 in request body,,,"Button should not be created
+response code: 417",,,
+53,,,create button with button_style as -1 in request body,,,"Button should not be created
+response code: 417",,,
+54,,,create button with button_style as string type in request body,,,"Button should not be created
+response code: 417",,,
+55,,,create button with button_style as null in request body,,,"Button should not be created (button_style required)
+response code: 417",,,
+56,,,create button with button_style as decimal (1.5) in request body,,,"Button should not be created
+response code: 417",,,
+57,,,create button without button_style field in request body,,,"Button should not be created (button_style required)
+response code: 417",,,
+58,,Button Style - Security,create button with button_style as JS script injection in request body,,,"Button should not be created
+response code: 417",,,
+59,,,create button with button_style as SQL injection in request body,,,"Button should not be created
+response code: 417",,,
+60,,Order Field - Valid,create button with order as positive integer in request body,,,"Button should be created successfully
+response code: 200",,,
+61,,,create button with order as 1 in request body,,,"Button should be created successfully
+response code: 200",,,
+62,,Order Field - Invalid,create button with order as 0 in request body,,,"Button should not be created
+response code: 417",,,
+63,,,create button with order as negative integer in request body,,,"Button should not be created
+response code: 417",,,
+64,,,create button with order as empty value in request body,,,"Button should not be created (order required)
+response code: 417",,,
+65,,,create button with order as null in request body,,,"Button should not be created (order required)
+response code: 417",,,
+66,,,create button with order as string type in request body,,,"Button should not be created
+response code: 417",,,
+67,,,create button with order as decimal (1.5) in request body,,,"Button should not be created
+response code: 417",,,
+68,,,create button without order field in request body,,,"Button should not be created (order required)
+response code: 417",,,
+69,,Order Field - Security,create button with order as JS script injection in request body,,,"Button should not be created
+response code: 417",,,
+70,,,create button with order as SQL injection in request body,,,"Button should not be created
+response code: 417",,,
+71,,Status Field - Valid,create button with status as true in request body,,,"Button should be created successfully
+response code: 200",,,
+72,,,create button with status as false in request body,,,"Button should be created successfully
+response code: 200",,,
+73,,,create button with status as 1 in request body,,,"Button should be created successfully
+response code: 200",,,
+74,,,create button with status as 0 in request body,,,"Button should be created successfully
+response code: 200",,,
+75,,Status Field - Invalid,create button with status as null in request body,,,"Button should not be created (status required)
+response code: 417",,,
+76,,,create button with status as empty string in request body,,,"Button should not be created (status required)
+response code: 417",,,
+77,,,create button with status as string 'true' in request body,,,"Button should not be created
+response code: 417",,,
+78,,,create button with status as integer 2 in request body,,,"Button should not be created
+response code: 417",,,
+79,,,create button without status field in request body,,,"Button should not be created (status required)
+response code: 417",,,
+80,,Icon Field - Valid,"create button with valid icon class name (e.g., 'fas fa-hands') in request body",,,"Button should be created successfully
+response code: 200",,,
+81,,,"create button with icon as another valid class (e.g., 'fab fa-firefox') in request body",,,"Button should be created successfully
+response code: 200",,,
+82,,,create button without icon field in request body,,,"Button should be created successfully (icon optional)
+response code: 200",,,
+83,,,create button with icon as null in request body,,,"Button should be created successfully (icon optional)
+response code: 200",,,
+84,,Icon Field - Invalid,create button with icon exceeding max char limit (101) in request body,,,"Button should not be created
+response code: 417",,,
+85,,,create button with icon as integer type in request body,,,"Button should not be created
+response code: 417",,,
+86,,Icon Field - Security,create button with icon as JS script injection in request body,,,"Button should be created (input sanitized)
+response code: 200",,,
+87,,,create button with icon as SQL injection in request body,,,"Button should be created (input sanitized)
+response code: 200",,,
+88,,Class Name - Valid,create button with valid class_name at max char limit (50) in request body,,,"Button should be created successfully
+response code: 200",,,
+89,,,create button without class_name field in request body,,,"Button should be created successfully (class_name optional)
+response code: 200",,,
+90,,,create button with class_name as null in request body,,,"Button should be created successfully (class_name optional)
+response code: 200",,,
+91,,Class Name - Invalid,create button with class_name exceeding max char limit (51) in request body,,,"Button should not be created
+response code: 417",,,
+92,,,create button with class_name as integer type in request body,,,"Button should not be created
+response code: 417",,,
+93,,Class Name - Security,create button with class_name as JS script injection in request body,,,"Button should be created (input sanitized)
+response code: 200",,,
+94,,,create button with class_name as SQL injection in request body,,,"Button should be created (input sanitized)
+response code: 200",,,
+95,,Text Color - Valid,create button with text_color as valid hash code (#ffffff) in request body,,,"Button should be created successfully
+response code: 200",,,
+96,,,create button with text_color as 3-digit hash code (#fff) in request body,,,"Button should be created successfully
+response code: 200",,,
+97,,,create button without text_color field in request body,,,"Button should be created successfully (text_color optional)
+response code: 200",,,
+98,,Text Color - Invalid,create button with text_color without hash symbol in request body,,,"Button should not be created
+response code: 417",,,
+99,,,create button with text_color as invalid hex characters in request body,,,"Button should not be created
+response code: 417",,,
+100,,,create button with text_color exceeding valid format in request body,,,"Button should not be created
+response code: 417",,,
+101,,,create button with text_color as integer type in request body,,,"Button should not be created
+response code: 417",,,
+102,,,create button with text_color as RGB format in request body,,,"Button should not be created
+response code: 417",,,
+103,,Text Color - Security,create button with text_color as JS script injection in request body,,,"Button should not be created
+response code: 417",,,
+104,,,create button with text_color as SQL injection in request body,,,"Button should not be created
+response code: 417",,,
+105,,Background Color - Valid,create button with background_color as valid hash code (#000000) in request body,,,"Button should be created successfully
+response code: 200",,,
+106,,,create button with background_color as 3-digit hash code (#000) in request body,,,"Button should be created successfully
+response code: 200",,,
+107,,,create button without background_color field in request body,,,"Button should be created successfully (background_color optional)
+response code: 200",,,
+108,,Background Color - Invalid,create button with background_color without hash symbol in request body,,,"Button should not be created
+response code: 417",,,
+109,,,create button with background_color as invalid hex characters in request body,,,"Button should not be created
+response code: 417",,,
+110,,,create button with background_color as integer type in request body,,,"Button should not be created
+response code: 417",,,
+111,,Background Color - Security,create button with background_color as JS script injection in request body,,,"Button should not be created
+response code: 417",,,
+112,,,create button with background_color as SQL injection in request body,,,"Button should not be created
+response code: 417",,,
+113,,Property Field - Valid,"create button with property as valid JSON object '{""key"": ""value""}' in request body",,,"Button should be created successfully
+response code: 200",,,
+114,,,create button with property as empty JSON object '{}' in request body,,,"Button should be created successfully
+response code: 200",,,
+115,,,create button without property field in request body,,,"Button should be created successfully (property optional)
+response code: 200",,,
+116,,,create button with property as null in request body,,,"Button should be created successfully (property optional)
+response code: 200",,,
+117,,Property Field - Invalid,create button with property as invalid JSON format (plain string) in request body,,,"Button should not be created (property must be valid JSON)
+response code: 417",,,
+118,,,create button with property as integer type (non-JSON) in request body,,,"Button should not be created (property must be valid JSON)
+response code: 417",,,
+119,,,create button with property as malformed JSON (missing quotes) in request body,,,"Button should not be created (property must be valid JSON)
+response code: 417",,,
+120,,Property Field - Security,create button with property containing JS script in JSON value in request body,,,"Button should be created (JSON value sanitized)
+response code: 200",,,
+121,,,create button with property containing SQL injection in JSON value in request body,,,"Button should be created (JSON value sanitized)
+response code: 200",,,
+122,,URL Param - Site,create button with valid site id in URL path,,,"Button should be created successfully
+response code: 200",,,
+123,,,create button with non-existent site id in URL path,,,"Button should not be created
+response code: 404",,,
+124,,,create button with deleted site id in URL path,,,"Button should not be created
+response code: 404",,,
+125,,,create button with unauthorized site id (another reseller) in URL path,,,"Button should not be created
+response code: 404",,,
+126,,,create button with empty site id in URL path,,,"Button should not be created
+response code: 404",,,
+127,,,create button with site id as string type in URL path,,,"Button should not be created
+response code: 404",,,
+128,,,create button with site id as negative integer in URL path,,,"Button should not be created
+response code: 404",,,
+129,,URL Param - Security,create button with site id as JS script injection in URL path,,,"Button should not be created
+response code: 404",,,
+130,,,create button with site id as SQL injection in URL path,,,"Button should not be created
+response code: 404",,,
+131,,,create button with site id as directory traversal path in URL path,,,"Button should not be created
+response code: 404",,,
+132,,Setting Precondition,create button when 'buttons' instance setting is TRUE,,,"Button should be created successfully
+response code: 200",,,
+133,,,create button when 'buttons' instance setting is FALSE,,,"Button should not be created (endpoint unavailable)
+response code: 404",,,
+134,,,toggle 'buttons' setting FALSE to TRUE and create button,,,"Button should be created successfully after setting enabled
+response code: 200",,,
+135,,,toggle 'buttons' setting TRUE to FALSE and create button,,,"Button should not be created (endpoint becomes unavailable)
+response code: 404",,,
+136,,Duplicate/Conflict,create button with same title and placement as existing button,,,"Button should be created (duplicates allowed)
+response code: 200",,,
+137,,,create button with order value that conflicts with existing button,,,"Button should be created and orders should be resequenced
+response code: 200",,,
+138,,,create button with order value exceeding current button count,,,"Button should be created at the end of the list
+response code: 200",,,
+139,,Type-Content Mismatch,create button with type 'link' but content as element id in request body,,,"Button should not be created (content mismatch)
+response code: 417",,,
+140,,,create button with type 'modal' but content as URL in request body,,,"Button should not be created (content mismatch)
+response code: 417",,,
+141,,,create button with type 'scroll' but content as plain text in request body,,,"Button should not be created (content mismatch)
+response code: 417",,,
+142,,,create button with type 'link' but content as modal text in request body,,,"Button should not be created (content mismatch)
+response code: 417",,,
+143,,Missing Required Fields,create button without title field in payload,,,"Button should not be created (title required)
+response code: 417",,,
+144,,,create button without placement field in payload,,,"Button should not be created (placement required)
+response code: 417",,,
+145,,,create button without button_style field in payload,,,"Button should not be created (button_style required)
+response code: 417",,,
+146,,,create button without order field in payload,,,"Button should not be created (order required)
+response code: 417",,,
+147,,,create button without status field in payload,,,"Button should not be created (status required)
+response code: 417",,,
+148,,,create button without content field in payload,,,"Button should not be created (content required)
+response code: 417",,,
+149,,,create button without type field in payload,,,"Button should not be created (type required)
+response code: 417",,,
+150,,,create button with only title field in payload,,,"Button should not be created (missing required fields)
+response code: 417",,,
+151,,,create button with empty payload,,,"Button should not be created (all required fields missing)
+response code: 417",,,
+152,,Edge Cases,create button with malformed JSON payload,,,"API returns bad request error (invalid JSON)
+response code: 400",,,
+153,,,create button with extra/unexpected fields in payload,,,"Button should be created (extra fields ignored)
+response code: 200",,,
+155,,,Send PUT request to POST endpoint (method not allowed),,,"API returns method not allowed error
+response code: 405",,,
+156,,,Send DELETE request to POST endpoint (method not allowed),,,"API returns method not allowed error
+response code: 405",,,
+157,,,create button with all fields as null in payload,,,"Button should not be created
+response code: 417",,,
+158,,,create button with all string fields containing whitespace only in payload,,,"Button should not be created
+response code: 417",,,
+159,,,create button with concurrent requests for same site,,,"All buttons should be created with correct order sequencing
+response code: 200",,,
+160,,,create button when site has reached maximum button limit,,,"Button should not be created (limit reached)
+response code: 417",,,
+161,,,create button for navbar placement when navbar already has maximum buttons,,,"Button should not be created (navbar limit reached)
+response code: 417",,,
+162,,,create button for header placement when header already has maximum buttons,,,"Button should not be created (header limit reached)
+response code: 417",,,
+163,,Response Validation,verify success response contains all button fields,,,"Response should contain id, title, placement, icon, class_name, button_style, text_color, background_color, order, status, type, content, property, site_id, timestamps
+response code: 200",,,
+164,,,verify error response contains proper validation messages,,,"Response should contain field-specific error messages
+response code: 417",,,
+165,,,verify button order via GET request after successful creation,,,"Button order should match the order value in request
+response code: 200",,,
+166,,Property Field - JSON Validation,create button with property as JSON array '[]' in request body,,,"Button should be created successfully
+response code: 200",,,
+167,,,create button with property as nested JSON object in request body,,,"Button should be created successfully
+response code: 200",,,
+168,,,create button with property as JSON with special characters in values in request body,,,"Button should be created successfully
+response code: 200",,,
+169,,,create button with property as boolean type (non-JSON) in request body,,,"Button should not be created (property must be valid JSON)
+response code: 417",,,
+170,,,create button with property as array type (non-JSON string) in request body,,,"Button should not be created (property must be valid JSON string)
+response code: 417",,,
+171,,,create button with property as JSON with unescaped quotes in request body,,,"Button should not be created (invalid JSON format)
+response code: 417",,,
